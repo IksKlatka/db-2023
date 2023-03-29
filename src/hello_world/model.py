@@ -13,5 +13,4 @@ class User:
 
 
 if __name__ == '__main__':
-    u = User(uuid4(), 'Koala', '123', datetime.now(), datetime.now())
-    print(u)
+    u1 = User(uuid4(), 'Nabuchodonozor', '666', datetime.now(), datetime.now())
