@@ -61,7 +61,6 @@ def run_migrations_offline() -> None:
         context.execute(f'set search_path to {os.getenv("SCHEMA")}')
         context.run_migrations()
 
-
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
