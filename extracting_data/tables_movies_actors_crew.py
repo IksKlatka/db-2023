@@ -8,7 +8,7 @@ Collecting data to tables:
 import pandas as pd
 import json
 from functions import get_crew_of_movie
-from model import CastEntry
+from .models.model import CastEntry
 
 def get_cast(index: int, cast_field: str):
     dicts = json.loads(cast_field)
@@ -39,7 +39,8 @@ def create_table_actors(df: pd.DataFrame):
 def create_table_movies(df: pd.DataFrame):
 
     # creating new DF containing movies id and title
-    movies_table = df[['id', 'title']]
+    movies_table = df[['movie_id', 'title']]
+    movies_table = movies_table.rename(columns={'movie_id':'id'})
     movies_table = movies_table.set_index('id')
     save_to_file(movies_table, 'table_movies.csv')
 
@@ -60,19 +61,18 @@ def create_table_crew(df: pd.DataFrame):
     save_to_file(crew_table, 'table_crew.csv')
 
 def save_to_file(df: pd.DataFrame, filename: str):
-    df.to_csv(path_or_buf=fr'C:/Users/igakl/Desktop/MOVIES/datas/{filename}',
-              sep=';')
+    df.to_csv(rf'C:/Users/igakl/Desktop/db-2023/db-2023/datas/{filename}',
+                     sep=';')
 
 
 if __name__ == "__main__":
 
     # importing csv files
-    c = pd.read_csv('./datas/tmdb_5000_credits.csv')
-    m = pd.read_csv('./datas/tmdb_5000_movies.csv')
+    c = pd.read_csv(r'C:/Users/igakl/Desktop/MOVIES/datas/tmdb_5000_credits.csv')
+    m = pd.read_csv(r'C:/Users/igakl/Desktop/MOVIES/datas/tmdb_5000_movies.csv')
     # creating DataFrames from csv files
     mdf, cdf = pd.DataFrame(m), pd.DataFrame(c)
     # Checking if all movie ids match in both DFs
     # all(cdf['movie_id'] == mdf['id']) -> True
 
-    create_table_crew(cdf)
 
