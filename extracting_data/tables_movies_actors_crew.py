@@ -8,7 +8,7 @@ Collecting data to tables:
 import pandas as pd
 import json
 from functions import get_crew_of_movie
-from .models.model import CastEntry
+from extracting_data.model import CastEntry
 
 def get_cast(index: int, cast_field: str):
     dicts = json.loads(cast_field)

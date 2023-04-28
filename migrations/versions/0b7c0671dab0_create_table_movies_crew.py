@@ -1,36 +1,35 @@
+"""create table movies_crew
+
+Revision ID: 0b7c0671dab0
+Revises: 8f71ebd68947
+Create Date: 2023-04-20 19:04:39.676890
+
 """
-
-create table movie_crew
-
-Revision ID: d8ea86a9dc10
-Creation date: 2023-04-20 20:33:59.345494
-
-"""
-from alembic import op, context
+from alembic import op
+import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd8ea86a9dc10'
-down_revision = 'c478838a27fe'
+revision = '0b7c0671dab0'
+down_revision = '8f71ebd68947'
 branch_labels = None
 depends_on = None
-
 
 def upgrade() -> None:
     op.execute(f"""
     --sql
     CREATE TABLE movie_crew(
-        credit_id TEXT,
         movie_id INT,
         person_id INT,
-        job TEXT,
+        credit_id TEXT,
         department TEXT,
+        job TEXT,
         gender INT,
 
         CONSTRAINT fk_movie_id FOREIGN KEY (movie_id)
-            REFERENCES movies(id),
+            REFERENCES movies(movie_id),
         CONSTRAINT fk_person_id FOREIGN KEY (person_id)
-            REFERENCES crew(id)      
+            REFERENCES crew(person_id)      
     )
 
 """)
@@ -40,3 +39,4 @@ def downgrade() -> None:
     op.execute(f"""
         DROP TABLE IF EXISTS movie_crew CASCADE;
     """)
+

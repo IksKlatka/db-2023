@@ -5,7 +5,7 @@ Collecting data to tables:
 """
 import pandas as pd
 import json
-from .models.model import CastEntry, CrewEntry
+from extracting_data.model import CastEntry, CrewEntry
 
 # pd.set_option('display.max_columns', None)
 
