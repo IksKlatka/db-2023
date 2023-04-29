@@ -103,3 +103,13 @@ class CountryEntry:
 class MovieCountry:
     movie_id: int
     country_id: str
+
+@dataclass
+class Genre:
+    genre_id: int
+    name: str
+
+@dataclass
+class MovieGenre:
+    movie_id: int
+    genre_id: int
