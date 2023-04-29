@@ -113,3 +113,19 @@ class Genre:
 class MovieGenre:
     movie_id: int
     genre_id: int
+
+@dataclass
+class Keyword:
+    id: int
+    name: str
+
+@dataclass
+class KeywordEntry:
+    movie_index: int
+    id: int
+    name: str
+
+@dataclass
+class MovieKeyword:
+    movie_id: int
+    keyword_id: int

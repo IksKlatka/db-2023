@@ -258,6 +258,51 @@ def get_movie_genres(filename):
 
     return entries
 
+# KEYWORDS -----------------------------------------------
+def get_keywords(filename):
+
+    df = pd.read_csv(filename)
+    keywords = df['keywords']
+
+    entries = []
+    for kwd in keywords:
+        dicts = json.loads(kwd)
+        for d in dicts:
+            entry = Keyword(id=d['id'], name=d['name'])
+            if entry not in entries:
+                entries.append(entry)
+
+    return entries
+
+def get_keywords_from_movie(index: int, kwd_field: str):
+    dicts = json.loads(kwd_field)
+    keywords = []
+    for d in dicts:
+        kwd = KeywordEntry(index, **d)
+        keywords.append(kwd)
+
+    return keywords
+
+def get_movie_keywords(filename: str):
+
+    df = pd.read_csv(filename)
+    subframe = df.loc[:, ['id', 'keywords']]
+    subframe_as_dict = subframe.to_dict(orient='records')
+    result = []
+    for row in subframe_as_dict:
+        movie_id = row['id']
+        keywords = row['keywords']
+        all_kwords = get_keywords_from_movie(movie_id, keywords)
+        movie_kwords = [to_moviekeyword(mk) for mk in all_kwords]
+        result.extend(movie_kwords)
+
+    return result
+
+def to_moviekeyword(kwd_entry: KeywordEntry) -> MovieKeyword:
+    ke = kwd_entry
+    return MovieKeyword(movie_id=ke.movie_index, keyword_id=ke.id)
+
+
 if __name__ == '__main__':
     df = pd.read_csv('./datas/tmdb_5000_credits.csv')
     filename = './datas/tmdb_5000_credits.csv'
