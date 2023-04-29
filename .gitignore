@@ -133,3 +133,6 @@ dmypy.json
 
 #folders
 datas
+.env
+requirements.txt
+
