@@ -1,5 +1,7 @@
 import json
 from collections.abc import Iterable
+from datetime import datetime
+
 import pandas as pd
 from model import *
 
@@ -65,15 +67,22 @@ def to_movie_crew(crew_entry: CrewEntry) -> MovieCrew:
 
 
 #MOVIES ----------------
-def get_movies(filename: str) -> Iterable[Movie]:
-    """Get movies from CSV"""
-    df = pd.read_csv(filename)
-    subframe = df.loc[:, ['id', 'title']]
-    subframe_as_dict = subframe.to_dict(orient='records')
-    #comprehension: creating list[object] of Movies
-    movies = [Movie(movie_id=d['id'], title=d['title']) for d in subframe_as_dict]
-    return movies
 
+def get_movies(filename: str) -> Iterable[Movie]:
+    df = pd.read_csv(filename)
+    df_sub = df.loc[:, ['id', 'title', 'budget', 'popularity', 'release_date', 'revenue']]  # wycinek tabel
+    df_as_dict = df_sub.to_dict(orient='records')
+    movies = []
+    for d in df_as_dict:
+        date = d['release_date']
+        try:
+            release_date = datetime.strptime(str(date), '%Y-%m-%d').date()
+        except:
+            print(date)
+
+        movies.append(Movie(movie_id=d['id'], title=d['title'], budget = d['budget'],
+                            popularity = d['popularity'], release_date=release_date, revenue = d['revenue']/1000))
+    return movies
 def get_movie_actors(filename: str) -> Iterable[MovieActor]:
     """Correctly assigning actors to movies"""
     df = pd.read_csv(filename)

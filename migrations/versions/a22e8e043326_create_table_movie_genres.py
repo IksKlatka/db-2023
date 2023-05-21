@@ -19,8 +19,8 @@ depends_on = None
 def upgrade() -> None:
     op.execute("""
     CREATE TABLE movie_genres(
-    movie_id int references movies(movie_id) on delete cascade,
-    genre_id int references genres(genre_id) on delete cascade
+    movie_id int REFERENCES movies(movie_id) ON DELETE CASCADE,
+    genre_id int REFERENCES genres(genre_id) ON DELETE CASCADE
     );
     """)
 

@@ -20,18 +20,13 @@ def upgrade() -> None:
     op.execute(f"""
     --sql
     CREATE TABLE movie_actors(
-        movie_id    INT,
-        actor_id    INT, 
+        movie_id int references movies(movie_id) on DELETE cascade,
+        actor_id int references actors(actor_id) on DELETE cascade,
         cast_id     INT,
         character   TEXT,
         credit_id   TEXT, 
         gender      INT, 
-        orders      INT,        
-    
-        CONSTRAINT fk_movie_id FOREIGN KEY (movie_id)
-            REFERENCES movies(movie_id),
-        CONSTRAINT fk_actor_id FOREIGN KEY (actor_id)
-            REFERENCES actors(actor_id)            
+        orders      INT     
     );
 """)
 
@@ -39,5 +34,5 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.execute(f"""
     --sql
-    DROP TABLE movie_actors;
+    DROP TABLE IF EXISTS movie_actors CASCADE;
 """)

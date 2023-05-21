@@ -21,7 +21,7 @@ def upgrade() -> None:
     --sql 
     CREATE TABLE crew(
         person_id SERIAL PRIMARY KEY,
-        name TEXT
+        name TEXT not null
     );
 """)
 

@@ -21,7 +21,7 @@ def upgrade() -> None:
     --sql 
     CREATE TABLE actors(
         actor_id SERIAL PRIMARY KEY,
-        name TEXT                
+        name TEXT not null              
     );
 """)
 
