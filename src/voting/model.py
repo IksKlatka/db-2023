@@ -13,6 +13,10 @@ class Election:
     eid: UUID
     name: str
 
+@dataclass
+class Participation:
+    uid: UUID
+    eid: UUID
 
 @dataclass
 class Token:

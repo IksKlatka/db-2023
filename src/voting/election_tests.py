@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 from asyncio import gather
 from unittest import IsolatedAsyncioTestCase
@@ -22,8 +23,16 @@ class Test(IsolatedAsyncioTestCase):
         await self.db.delete_user(user.uid)
 
     # todo: dodać test tworzący i usuwający election
+    async def test_can_delete_election(self):
+        election = await self.db.create_election(Election(eid=uuid.uuid4(), name="test_election"))
+        await self.db.delete_election(election.eid)
 
     # todo:  dodać test w którym user z uid1 rejestruje się do wyborów eid1, czyli test do db.register_for_election
+    async def test_can_register_for_election(self):
+        user = await self.db.create_user(User(uuid.uuid4(), "x"))
+        election = await self.db.create_election(Election(uuid.uuid4(), "test_election"))
+        await self.db.register_for_election(user.uid, election.eid)
+
 
     async def test_cannot_get_many_tokens_for_user(self):
         tasks = []
@@ -33,17 +42,17 @@ class Test(IsolatedAsyncioTestCase):
             tasks.append(create_task(self.db.register_for_election(self.eid1, self.uid1)))
 
         tokens = set()
-        for t in tasks:
+        for task in tasks:
             try:
                 # no error
-                g = await t
+                g = await task
                 tokens.add(g)
             except VotingError as e:
                 # error
                 errors += 1
 
-        self.assertEquals(errors, N - 1)
-        self.assertEquals(len(tokens), 1)
+        self.assertEqual(errors, N - 1)
+        self.assertEqual(len(tokens), 1)
 
     async def test_token_can_vote_exactly_once(self):
         N = 30
@@ -63,11 +72,12 @@ class Test(IsolatedAsyncioTestCase):
                 # error
                 errors += 1
 
-        self.assertEquals(errors, N - 1)
+        self.assertEqual(errors, N - 1)
 
         # assert exactly one vote in table votes
         # assert len(self.db.get_votes_by_eid(self.eid1)) == 1
 
 
 if __name__ == "__main__":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     unittest.main()
