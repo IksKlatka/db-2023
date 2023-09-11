@@ -3,7 +3,7 @@ from enum import IntEnum
 from uuid import UUID
 
 from pydantic import BaseModel
-from src.praktyki.model import Role
+from .model import Role
 
 
 class Document(BaseModel):

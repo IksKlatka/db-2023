@@ -3,7 +3,7 @@ from enum import IntEnum
 from uuid import UUID
 
 from pydantic import BaseModel, Field
-from src.praktyki.helpers import now
+from .helpers import now
 
 
 class Company(BaseModel):

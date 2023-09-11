@@ -59,7 +59,9 @@ def run_migrations_offline() -> None:
         dialect_opts={"paramstyle": "named"},
     )
 
+    logger.info("Offline migrations running...")
     with context.begin_transaction():
+        context.execute(f"SET search_path TO {os.getenv('SCHEMA')}")
         context.run_migrations()
 
 
@@ -79,9 +81,13 @@ def run_migrations_online() -> None:
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
 
+        logger.info("Online migrations running...")
         with context.begin_transaction():
+            context.execute(f"SET search_path TO {os.getenv('SCHEMA')}")
             context.run_migrations()
 
+if "seed" in context.get_x_argument(as_dictionary=True):
+    print("Seeding enabled...")
 
 if context.is_offline_mode():
     run_migrations_offline()
